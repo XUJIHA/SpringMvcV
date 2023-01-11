@@ -82,7 +82,6 @@ public class AttractionsBean implements Serializable{
 
 	public AttractionsBean(String name, String address, String serviceHour, String serviceHour2, String introduction, String phone,
 			byte[] image1, String fileName) {
-		super();
 		this.name = name;
 		this.address = address;
 		this.serviceHour = serviceHour;

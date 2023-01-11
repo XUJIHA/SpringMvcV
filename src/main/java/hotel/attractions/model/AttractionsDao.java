@@ -14,40 +14,24 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
-
 @Repository
 @Transactional
-//public class AttractionsDao implements IAttractionsDao{
-public class AttractionsDao {
+public class AttractionsDao implements IAttractionsDao{
 	
 	@Autowired
 	private SessionFactory factory;
-//	private Session session;
 	
-//	public AttractionsDao(Session session) {
-//		this.session = session;
-//	}
-//	@Override
+	@Override
 	public AttractionsBean findById(int id) {
 		Session session = factory.openSession();
 		
-		String hql = "from AttractionsBean a where a.attractionsId = :id";
-		
-		try {
-			AttractionsBean result = session.createQuery(hql, AttractionsBean.class)
-					.setParameter("id", id)
-					.getSingleResult();
-			return result;
-		}catch(NoResultException | NonUniqueResultException e){
-			e.printStackTrace();
-			return null;
-		}finally {
-			session.close();
-		}
+		AttractionsBean aBean = session.get(AttractionsBean.class, id);
+		session.close();
+		return aBean;
 		
 	}
 	
-//	@Override
+	@Override
 	public List<AttractionsBean> findAll() {
 		Session session = factory.openSession();
 		
@@ -68,12 +52,11 @@ public class AttractionsDao {
 		}
 	}
 
-//	@Override
+	@Override
 	public List<AttractionsBean> likeSearch(String search) {
 		Session session = factory.openSession();
 		
 		String hql = "from AttractionsBean where name like :n or address like :a or introduction like :i or phone like :p";
-//			System.out.println("search"+search);
 		Query<AttractionsBean> query = session.createQuery(hql, AttractionsBean.class)
 				.setParameter("n", "%" + search + "%")
 				.setParameter("a", "%" + search + "%")
@@ -89,53 +72,33 @@ public class AttractionsDao {
 		return resultList;
 	}
 	
-//	@Override
+	@Override
 	public AttractionsBean save(AttractionsBean bean) {
 		Session session = factory.openSession();
 		
-		AttractionsBean abean = new AttractionsBean();
-		abean.setName(bean.getName());
-		abean.setAddress(bean.getAddress());
-		abean.setServiceHour(bean.getServiceHour());
-		abean.setServiceHour2(bean.getServiceHour2());
-		abean.setIntroduction(bean.getIntroduction());
-		abean.setPhone(bean.getPhone());
-		abean.setImage1(bean.getImage1());
-		abean.setFileName(bean.getFileName());
-		
-		if(abean != null) {
-			session.save(abean);
+		if(bean != null) {
+			session.save(bean);
 		}
-
-		session.close();
 		
-		return abean;
+		session.close();
+		return bean;
 	}
 	
-//	@Override
+	@Override
 	public AttractionsBean updateAttractions(AttractionsBean bean) {
 		Session session = factory.openSession();
 		
-		AttractionsBean abean = session.get(AttractionsBean.class, bean.getAttractionsId());
-		if(abean != null) {
-			abean.setName(bean.getName());
-			abean.setAddress(bean.getAddress());
-			abean.setServiceHour(bean.getServiceHour());
-			abean.setServiceHour2(bean.getServiceHour2());
-			abean.setIntroduction(bean.getIntroduction());
-			abean.setPhone(bean.getPhone());
-			abean.setImage1(bean.getImage1());
-			abean.setFileName(bean.getFileName());
+		if(bean != null) {
+			session.update(bean);
+			session.flush();
 		}
-//		session.update(abean);
 		
 		session.close();
 		
-		return abean;
-		
+		return bean;
 		}
 	
-//	@Override
+	@Override
 	public boolean deleteById(int id) {
 		Session session = factory.openSession();
 		
@@ -143,7 +106,7 @@ public class AttractionsDao {
 		
 		if(aBean != null) {
 			session.delete(aBean);
-			
+			session.flush();
 			session.close();
 			
 			return true;
@@ -153,4 +116,5 @@ public class AttractionsDao {
 			return false;
 		}
 	}
+	
 }

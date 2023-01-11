@@ -32,22 +32,25 @@ public class WebAppConfig implements WebMvcConfigurer {
 	@Bean
 	public InternalResourceViewResolver viewResolver() {
 		InternalResourceViewResolver irvr = new InternalResourceViewResolver();
-//		irvr.setPrefix("/WEB-INF/pages/");
-		irvr.setPrefix("/attractions/");
+		irvr.setPrefix("/WEB-INF/pages/");
 		irvr.setSuffix(".jsp");
 		return irvr;
 	}
 
 	@Override
 	public void addResourceHandlers(ResourceHandlerRegistry registry) {
-		registry.addResourceHandler("/images/**").addResourceLocations("/WEB-INF/resources/images/");
-		registry.addResourceHandler("/css/**").addResourceLocations("/WEB-INF/resources/css/");
+		registry.addResourceHandler("/img/**").addResourceLocations("/WEB-INF/pages/img/");
+		registry.addResourceHandler("/css/**").addResourceLocations("/WEB-INF/pages/css/");
+		registry.addResourceHandler("/gift/**").addResourceLocations("/WEB-INF/pages/gift/");
+		registry.addResourceHandler("/fonts/**").addResourceLocations("/WEB-INF/pages/fonts/");
+		registry.addResourceHandler("/js/**").addResourceLocations("/WEB-INF/pages/js/");
+		registry.addResourceHandler("/Source/**").addResourceLocations("/WEB-INF/pages/Source/");
 	}
 
 	@Override
 	public void addViewControllers(ViewControllerRegistry registry) {
-		registry.addRedirectViewController("/", "membersmain.controller");
-		registry.addViewController("/funny.action").setViewName("form");
+//		registry.addRedirectViewController("/", "ccc.controller");
+		registry.addViewController("/").setViewName("index");
 	}
 	
 	@Bean
